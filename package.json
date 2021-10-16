@@ -1,0 +1,25 @@
+{
+  "name": "logstream-experiment",
+  "version": "1.0.0",
+  "description": "An experiment in streaming logs via websockets",
+  "main": "server.js",
+  "scripts": {
+    "spam": "node scripts/spam.js | tee scripts/stream-this.log",
+    "server:ws": "nodemon server.js",
+    "server:static": "serve www/",
+    "server": "run-p server:*"
+  },
+  "keywords": [],
+  "author": "Anik Das",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "uuid": "^8.3.2",
+    "ws": "^8.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13",
+    "npm-run-all": "^4.1.5",
+    "serve": "^12.0.1"
+  }
+}

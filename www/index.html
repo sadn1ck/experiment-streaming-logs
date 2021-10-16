@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>logstream</title>
+  </head>
+
+  <body>
+    <main>
+      <button onclick="start()" class="startBtn">Start</button>
+      <button onclick="stop()" class="stopBtn" disabled>End</button>
+      <div class="logs">
+        Log goes here after this
+        <pre class="log"></p>
+      </div>
+    </main>
+  </body>
+  <script>
+    let ws = null;
+    let startBtn = document.querySelector('.startBtn');
+    let stopBtn = document.querySelector('.stopBtn');
+    let parentLog = document.querySelector(".logs");
+    function start() {
+      if (!ws) {
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        ws = new WebSocket("ws://localhost:8001");
+
+        ws.addEventListener("open", () => {
+          console.log("open");
+          ws.send(JSON.stringify({ msg: "start" }));
+        });
+
+        ws.addEventListener("message", (message) => {
+          const jsonMsg = JSON.parse(message.data);
+          console.info(jsonMsg);
+          if (jsonMsg.event === "log") {
+            const log = document.createElement("pre");
+            log.classList.add("log");
+            log.innerText = jsonMsg.log;
+            parentLog.appendChild(log);
+          }
+        });
+      } else {
+        console.log("ws conn already established");
+      }
+    }
+    function stop(){
+        ws.close();
+        ws = null;
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+    }
+  </script>
+</html>
