@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
 import { logger } from "./lib/logger.js";
-import { tail } from "./lib/tail.js";
+import { reader } from "./lib/tail.js";
 
 const WS_PORT = 8001;
 
@@ -16,7 +16,7 @@ const wssHandler = (socket) => {
     logger(jsonMsg, "ws");
     // if start
     if (jsonMsg.msg === "start") {
-      tail(socket, {
+      reader(socket, {
         command: "tail",
         args: ["-f", "scripts/stream-this.log"],
       });
